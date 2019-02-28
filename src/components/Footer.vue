@@ -1,7 +1,7 @@
 <template>
   <footer class="row">
     <nav class="navbar navbar-togglable-md navbar-light">
-      <ul class="nvabar-nav">
+      <ul class="nav">
         <li class="nav-item">
           <a href class="nav-link">Home</a>
         </li>

@@ -2,7 +2,7 @@
   <header class="row">
     <nav class="navbar navbar-togglable-md navbar-light">
       <a href="/" class="navbar-brand">Pizza Home</a>
-      <ul class="nvabar-nav">
+      <ul class="nav">
         <li class="nav-item">
           <a href class="nav-link">Home</a>
         </li>

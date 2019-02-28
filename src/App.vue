@@ -7,6 +7,12 @@
       <pp-home></pp-home>
     </div>
     <div class="container">
+      <pp-menu></pp-menu>
+    </div>
+    <div class="container">
+      <pp-admin></pp-admin>
+    </div>
+    <div class="container">
       <pp-footer></pp-footer>
     </div>
   </div>
@@ -16,12 +22,16 @@
 import Header from './components/Header.vue'
 import Footer from './components/Footer.vue'
 import Home from './components/Home.vue'
+import Menu from './components/Menu.vue'
+import Admin from './components/Admin.vue'
 
 export default {
   components: {
     ppHeader: Header,
     ppFooter: Footer,
-    ppHome: Home
+    ppHome: Home,
+    ppMenu: Menu,
+    ppAdmin: Admin
   }
 }
 </script>
