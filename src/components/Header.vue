@@ -3,12 +3,12 @@
     <nav class="navbar navbar-togglable-md navbar-light">
       <a href="/" class="navbar-brand">Pizza Home</a>
       <ul class="nav">
-        <li class="nav-item">
-          <a href class="nav-link">Home</a>
-        </li>
-        <li class="nav-item">
+        <router-link :to="{ name: 'home' }" tag="li">
+          <a class="nav-link">Home</a>
+        </router-link>
+        <router-link :to="{ name: 'menu' }" tag="li">
           <a href class="nav-link">Menu</a>
-        </li>
+        </router-link>
       </ul>
     </nav>
   </header>

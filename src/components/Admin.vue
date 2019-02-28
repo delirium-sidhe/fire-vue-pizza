@@ -72,6 +72,13 @@ export default {
   components: {
     ppNewPizza: NewPizza,
     ppLogin: Login
+  },
+  beforeRouteLeave: (to, from, next) => {
+    if (confirm('Have you logge out?') === true) {
+      next()
+    } else {
+      next(false)
+    }
   }
 }
 </script>
