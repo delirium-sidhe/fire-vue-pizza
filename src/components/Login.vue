@@ -1,36 +1,54 @@
 <template>
   <div class="row">
-    <form action>
-      <div class="form-group">
-        <label for>E-mail</label>
-        <input
-          type="email"
-          class="form-control"
-          id="email"
-          placeholder="yourmail@email.com"
-        />
+    <div>
+      <div>
+        <p>
+          Logged in as:
+          <br />
+          {{ currentUser }}
+        </p>
       </div>
-      <div class="form-group">
-        <label for>Password</label>
-        <input
-          type="password"
-          class="form-control"
-          id="password"
-          placeholder="your password"
-        />
-        <button type="button" class="btn btn-primary" @click.prevent="signIn">
-          Sign In
-        </button>
-        <button type="button" class="btn btn-danger" @click.prevent="signOut">
-          Sign Out
-        </button>
-      </div>
-    </form>
+      <form action>
+        <div class="form-group">
+          <label for>E-mail</label>
+          <input
+            type="email"
+            class="form-control"
+            id="email"
+            placeholder="yourmail@email.com"
+          />
+        </div>
+        <div class="form-group">
+          <label for>Password</label>
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            placeholder="your password"
+          />
+          <button type="button" class="btn btn-primary" @click.prevent="signIn">
+            Sign In
+          </button>
+          <button type="button" class="btn btn-danger" @click.prevent="signOut">
+            Sign Out
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 
 <script>
 import firebase from 'firebase'
+import store from '../store/store'
+
+firebase.auth().onAuthStateChanged(function(user) {
+  if (user) {
+    store.dispatch('setUser', user)
+  } else {
+    store.dispatch('setUser', null)
+  }
+})
 
 export default {
   methods: {
@@ -52,7 +70,8 @@ export default {
         })
     },
     signOut() {
-      firebase.auth
+      firebase
+        .auth()
         .signOut()
         .then(function() {
           alert('logged out')
@@ -61,6 +80,11 @@ export default {
           alert('Error')
           console.log(error)
         })
+    }
+  },
+  computed: {
+    currentUser() {
+      return this.$store.getters.currentUser
     }
   }
 }

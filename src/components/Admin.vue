@@ -14,9 +14,9 @@
               <th>Remove from menu</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody v-for="item in getMenuItems">
             <tr>
-              <td>Pizza</td>
+              <td>{{ item.name }}</td>
               <td>
                 <button class="btn btn-outline-danger btn-sm">X</button>
               </td>
@@ -27,7 +27,7 @@
     </div>
     <div class="row">
       <div class="col-sm-12">
-        <h3>Current orders:</h3>
+        <h3>Current orders: {{ numberOfOrders }}</h3>
         <table class="table table-sm">
           <thead class="thead-default">
             <tr>
@@ -72,6 +72,14 @@ export default {
   components: {
     ppNewPizza: NewPizza,
     ppLogin: Login
+  },
+  computed: {
+    getMenuItems() {
+      return this.$store.getters.getMenuItems
+    },
+    numberOfOrders() {
+      return this.$store.getters.numberOfOrders
+    }
   },
   beforeRouteLeave: (to, from, next) => {
     if (confirm('Have you logge out?') === true) {

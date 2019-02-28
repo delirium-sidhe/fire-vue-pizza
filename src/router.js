@@ -13,6 +13,7 @@ Vue.use(Router)
 
 export default new Router({
   mode: 'history',
+  linkActiveClass: 'is-active',
   scrollBehavior(to, from, savedPosition) {
     //   return { x: 0, y: 0 }
     // return { selector: '.btn' }
