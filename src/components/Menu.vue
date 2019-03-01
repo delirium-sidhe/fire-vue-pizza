@@ -23,9 +23,7 @@
                 class="btn btn-sm btn-outline-success"
                 type="button"
                 @click="addToBasket(item, option)"
-              >
-                +
-              </button>
+              >+</button>
             </td>
           </tr>
         </tbody>
@@ -45,21 +43,9 @@
           <tbody v-for="item in basket">
             <tr>
               <td>
-                <button
-                  class="btn btn-sm"
-                  type="button"
-                  @click="decreaseQuantity(item)"
-                >
-                  -
-                </button>
+                <button class="btn btn-sm" type="button" @click="decreaseQuantity(item)">-</button>
                 <span>{{ item.quantity }}</span>
-                <button
-                  class="btn btn-sm"
-                  type="button"
-                  @click="increaseQuantity(item)"
-                >
-                  +
-                </button>
+                <button class="btn btn-sm" type="button" @click="increaseQuantity(item)">+</button>
               </td>
               <td>{{ item.name }} {{ item.size }}</td>
               <td>{{ item.price * item.quantity }}</td>
@@ -67,9 +53,7 @@
           </tbody>
         </table>
         <p>Order total:</p>
-        <button class="btn btn-success btn-block" @click="addNewOrder">
-          Place Order
-        </button>
+        <button class="btn btn-success btn-block" @click="addNewOrder">Place Order</button>
       </div>
       <div v-else>
         <p>{{ basketText }}</p>
@@ -80,6 +64,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   data() {
     return {
@@ -88,10 +74,11 @@ export default {
     }
   },
   computed: {
-    getMenuItems() {
-      // return this.$store.state.menuItems
-      return this.$store.getters.getMenuItems
-    }
+    ...mapGetters(['getMenuItems'])
+    // getMenuItems() {
+    //   // return this.$store.state.menuItems
+    //   return this.$store.getters.getMenuItems
+    // }
   },
   methods: {
     addToBasket(item, option) {

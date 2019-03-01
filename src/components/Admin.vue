@@ -55,7 +55,7 @@
       </div>
     </div>
     <!-- login -->
-    <hr />
+    <hr>
     <div class="row">
       <div class="col-sm-12 col-lg-6">
         <pp-login></pp-login>
@@ -67,6 +67,7 @@
 <script>
 import NewPizza from './NewPizza.vue'
 import Login from './Login.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -74,12 +75,7 @@ export default {
     ppLogin: Login
   },
   computed: {
-    getMenuItems() {
-      return this.$store.getters.getMenuItems
-    },
-    numberOfOrders() {
-      return this.$store.getters.numberOfOrders
-    }
+    ...mapGetters(['numberOfOrders', 'getMenuItems'])
   },
   beforeRouteLeave: (to, from, next) => {
     if (confirm('Have you logge out?') === true) {
