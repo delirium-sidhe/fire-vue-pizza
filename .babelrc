@@ -1,0 +1,3 @@
+{
+  "plugins": ["synax-dynamic-import"]
+}

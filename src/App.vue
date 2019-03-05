@@ -28,7 +28,7 @@
 <script>
 import Header from './components/Header.vue'
 import Footer from './components/Footer.vue'
-import { dbMenuRef } from './firebaseConfig'
+import { dbMenuRef, dbOrdersRef } from './firebaseConfig'
 
 export default {
   components: {
@@ -36,9 +36,23 @@ export default {
     ppFooter: Footer
   },
   created() {
-    this.$store.dispatch('setMenuRef', dbMenuRef)
+    this.$store.dispatch('setMenuRef', dbMenuRef),
+      this.$store.dispatch('setOrdersRef', dbOrdersRef)
   }
 }
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+header,
+footer {
+  background: #eceeef;
+  padding: 40px 0;
+  font-size: 1.2em;
+}
+
+.card {
+  background-color: #69ab64;
+  margin: 20px 0;
+  border-radius: 0;
+}
+</style>

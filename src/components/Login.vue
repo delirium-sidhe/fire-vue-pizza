@@ -2,33 +2,42 @@
   <div class="row">
     <div>
       <div>
-        <p>
+        <p v-if="!currentUser">Pleasse login to continue</p>
+        <p v-else>
           Logged in as:
           <br />
           {{ currentUser }}
         </p>
       </div>
       <form action>
-        <div class="form-group">
-          <label for>E-mail</label>
-          <input
-            type="email"
-            class="form-control"
-            id="email"
-            placeholder="yourmail@email.com"
-          />
+        <div v-if="!currentUser">
+          <div class="form-group">
+            <label for>E-mail</label>
+            <input
+              type="email"
+              class="form-control"
+              id="email"
+              placeholder="yourmail@email.com"
+            />
+          </div>
+          <div class="form-group">
+            <label for>Password</label>
+            <input
+              type="password"
+              class="form-control"
+              id="password"
+              placeholder="your password"
+            />
+            <button
+              type="button"
+              class="btn btn-primary"
+              @click.prevent="signIn"
+            >
+              Sign In
+            </button>
+          </div>
         </div>
-        <div class="form-group">
-          <label for>Password</label>
-          <input
-            type="password"
-            class="form-control"
-            id="password"
-            placeholder="your password"
-          />
-          <button type="button" class="btn btn-primary" @click.prevent="signIn">
-            Sign In
-          </button>
+        <div v-else>
           <button type="button" class="btn btn-danger" @click.prevent="signOut">
             Sign Out
           </button>
@@ -90,4 +99,13 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+form {
+  margin: 20px 0;
+}
+
+button {
+  margin: 5px;
+  margin-top: 15px;
+}
+</style>

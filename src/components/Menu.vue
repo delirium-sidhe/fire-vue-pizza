@@ -9,21 +9,23 @@
             <th>Add to basket</th>
           </tr>
         </thead>
-        <tbody v-for="item in getMenuItems" :key="item.name">
+        <tbody v-for="item in getMenuItems" :key="item['.key']">
           <tr>
             <td>
               <strong>{{ item.name }}</strong>
             </td>
           </tr>
-          <tr v-for="option in item.options">
+          <tr v-for="(option, index) in item.options" :key="index">
             <td>{{ option.size }}</td>
-            <td>{{ option.price }}</td>
+            <td>{{ option.price | currency }}</td>
             <td>
               <button
                 class="btn btn-sm btn-outline-success"
                 type="button"
                 @click="addToBasket(item, option)"
-              >+</button>
+              >
+                +
+              </button>
             </td>
           </tr>
         </tbody>
@@ -40,24 +42,37 @@
               <th>Total</th>
             </tr>
           </thead>
-          <tbody v-for="item in basket">
+          <tbody v-for="(item, index) in basket" :key="index">
             <tr>
               <td>
-                <button class="btn btn-sm" type="button" @click="decreaseQuantity(item)">-</button>
+                <button
+                  class="btn btn-sm"
+                  type="button"
+                  @click="decreaseQuantity(item)"
+                >
+                  -
+                </button>
                 <span>{{ item.quantity }}</span>
-                <button class="btn btn-sm" type="button" @click="increaseQuantity(item)">+</button>
+                <button
+                  class="btn btn-sm"
+                  type="button"
+                  @click="increaseQuantity(item)"
+                >
+                  +
+                </button>
               </td>
               <td>{{ item.name }} {{ item.size }}</td>
-              <td>{{ item.price * item.quantity }}</td>
+              <td>{{ (item.price * item.quantity) | currency }}</td>
             </tr>
           </tbody>
         </table>
-        <p>Order total:</p>
-        <button class="btn btn-success btn-block" @click="addNewOrder">Place Order</button>
+        <p>Order total: {{ total | currency }}</p>
+        <button class="btn btn-success btn-block" @click="addNewOrder">
+          Place Order
+        </button>
       </div>
       <div v-else>
         <p>{{ basketText }}</p>
-        {{ this.$store.state.orders }}
       </div>
     </div>
   </div>
@@ -65,6 +80,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { dbOrdersRef } from '../firebaseConfig'
 
 export default {
   data() {
@@ -74,7 +90,15 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getMenuItems'])
+    ...mapGetters(['getMenuItems']),
+    total() {
+      var totalCost = 0
+      for (var items in this.basket) {
+        var individualItem = this.basket[items]
+        totalCost += individualItem.quantity * individualItem.price
+      }
+      return totalCost
+    }
     // getMenuItems() {
     //   // return this.$store.state.menuItems
     //   return this.$store.getters.getMenuItems
@@ -103,7 +127,8 @@ export default {
       this.basket.splice(this.basket.indexOf(item), 1)
     },
     addNewOrder() {
-      this.$store.commit('addOrder', this.basket)
+      // this.$store.commit('addOrder', this.basket)
+      dbOrdersRef.push(this.basket)
       this.basket = []
       this.basketText = 'Thank you, your order has been placed.'
     }
@@ -111,4 +136,8 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+button {
+  margin: 0 5px;
+}
+</style>

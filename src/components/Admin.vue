@@ -1,61 +1,77 @@
 <template>
   <div>
-    <div class="row">
-      <div class="col-sm-12 col-md-6">
-        <pp-new-pizza></pp-new-pizza>
-      </div>
+    <section v-if="currentUser">
+      <div class="row">
+        <div class="col-sm-12 col-md-6">
+          <pp-new-pizza></pp-new-pizza>
+        </div>
 
-      <div class="col-sm-12 col-md-6">
-        <h3>Menu:</h3>
-        <table class="table table-hover">
-          <thead class="thead-default">
-            <tr>
-              <th>Item</th>
-              <th>Remove from menu</th>
-            </tr>
-          </thead>
-          <tbody v-for="item in getMenuItems">
-            <tr>
-              <td>{{ item.name }}</td>
-              <td>
-                <button class="btn btn-outline-danger btn-sm">X</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="col-sm-12 col-md-6">
+          <h3>Menu:</h3>
+          <table class="table table-hover">
+            <thead class="thead-default">
+              <tr>
+                <th>Item</th>
+                <th>Remove from menu</th>
+              </tr>
+            </thead>
+            <tbody v-for="item in getMenuItems" :key="item['.key']">
+              <tr>
+                <td>{{ item.name }}</td>
+                <td>
+                  <button
+                    class="btn btn-outline-danger btn-sm"
+                    @click="removeMenuItem(item['.key'])"
+                  >
+                    X
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-sm-12">
-        <h3>Current orders: {{ numberOfOrders }}</h3>
-        <table class="table table-sm">
-          <thead class="thead-default">
-            <tr>
-              <th>Item</th>
-              <th>Size</th>
-              <th>Quantity</th>
-              <th>Price</th>
-            </tr>
-          </thead>
-          <tbody>
-            <div class="order-number">
-              <strong>
-                <em>Order number: 1</em>
-              </strong>
-              <button class="btn btn-outline-danger btn-sm">X</button>
-            </div>
-            <tr>
-              <td>Pizza</td>
-              <td>9i</td>
-              <td>Quantity</td>
-              <td>75</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="row">
+        <div class="col-sm-12">
+          <h3>Current orders: {{ numberOfOrders }}</h3>
+          <table
+            class="table table-sm"
+            v-for="(orders, index) in getOrders"
+            :key="orders['.key']"
+          >
+            <thead class="thead-default">
+              <tr>
+                <th>Item</th>
+                <th>Size</th>
+                <th>Quantity</th>
+                <th>Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              <div class="order-number">
+                <strong>
+                  <em>Order number: {{ index + 1 }}</em>
+                </strong>
+                <button
+                  class="btn btn-outline-danger btn-sm"
+                  @click="removeOrderItem(orders['.key'])"
+                >
+                  X
+                </button>
+              </div>
+              <tr v-for="(orderItems, index) in orders['.value']" :key="index">
+                <td>{{ orderItems.name }}</td>
+                <td>{{ orderItems.size }}</td>
+                <td>{{ orderItems.quantity }}</td>
+                <td>{{ orderItems.price | currency }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
+    </section>
     <!-- login -->
-    <hr>
+    <hr />
     <div class="row">
       <div class="col-sm-12 col-lg-6">
         <pp-login></pp-login>
@@ -68,6 +84,7 @@
 import NewPizza from './NewPizza.vue'
 import Login from './Login.vue'
 import { mapGetters } from 'vuex'
+import { dbMenuRef, dbOrdersRef } from '../firebaseConfig'
 
 export default {
   components: {
@@ -75,7 +92,20 @@ export default {
     ppLogin: Login
   },
   computed: {
-    ...mapGetters(['numberOfOrders', 'getMenuItems'])
+    ...mapGetters([
+      'numberOfOrders',
+      'getMenuItems',
+      'getOrders',
+      'currentUser'
+    ])
+  },
+  methods: {
+    removeMenuItem(key) {
+      dbMenuRef.child(key).remove()
+    },
+    removeOrderItem(key) {
+      dbOrdersRef.child(key).remove()
+    }
   },
   beforeRouteLeave: (to, from, next) => {
     if (confirm('Have you logge out?') === true) {
@@ -87,4 +117,12 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.order-number {
+  margin: 10px 0;
+}
+
+button {
+  margin: 0 10px;
+}
+</style>
