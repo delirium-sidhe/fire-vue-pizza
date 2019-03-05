@@ -1,75 +1,6 @@
 <template>
   <div>
-    <section v-if="currentUser">
-      <div class="row">
-        <div class="col-sm-12 col-md-6">
-          <pp-new-pizza></pp-new-pizza>
-        </div>
-
-        <div class="col-sm-12 col-md-6">
-          <h3>Menu:</h3>
-          <table class="table table-hover">
-            <thead class="thead-default">
-              <tr>
-                <th>Item</th>
-                <th>Remove from menu</th>
-              </tr>
-            </thead>
-            <tbody v-for="item in getMenuItems" :key="item['.key']">
-              <tr>
-                <td>{{ item.name }}</td>
-                <td>
-                  <button
-                    class="btn btn-outline-danger btn-sm"
-                    @click="removeMenuItem(item['.key'])"
-                  >
-                    X
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-12">
-          <h3>Current orders: {{ numberOfOrders }}</h3>
-          <table
-            class="table table-sm"
-            v-for="(orders, index) in getOrders"
-            :key="orders['.key']"
-          >
-            <thead class="thead-default">
-              <tr>
-                <th>Item</th>
-                <th>Size</th>
-                <th>Quantity</th>
-                <th>Price</th>
-              </tr>
-            </thead>
-            <tbody>
-              <div class="order-number">
-                <strong>
-                  <em>Order number: {{ index + 1 }}</em>
-                </strong>
-                <button
-                  class="btn btn-outline-danger btn-sm"
-                  @click="removeOrderItem(orders['.key'])"
-                >
-                  X
-                </button>
-              </div>
-              <tr v-for="(orderItems, index) in orders['.value']" :key="index">
-                <td>{{ orderItems.name }}</td>
-                <td>{{ orderItems.size }}</td>
-                <td>{{ orderItems.quantity }}</td>
-                <td>{{ orderItems.price | currency }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
+    <pp-admin-hidden v-if="currentUser"></pp-admin-hidden>
     <!-- login -->
     <hr />
     <div class="row">
@@ -81,38 +12,18 @@
 </template>
 
 <script>
-import NewPizza from './NewPizza.vue'
 import Login from './Login.vue'
 import { mapGetters } from 'vuex'
-import { dbMenuRef, dbOrdersRef } from '../firebaseConfig'
+// dynamic import
+const AdminHidden = () => import('./AdminHidden.vue')
 
 export default {
   components: {
-    ppNewPizza: NewPizza,
-    ppLogin: Login
+    ppLogin: Login,
+    ppAdminHidden: AdminHidden
   },
   computed: {
-    ...mapGetters([
-      'numberOfOrders',
-      'getMenuItems',
-      'getOrders',
-      'currentUser'
-    ])
-  },
-  methods: {
-    removeMenuItem(key) {
-      dbMenuRef.child(key).remove()
-    },
-    removeOrderItem(key) {
-      dbOrdersRef.child(key).remove()
-    }
-  },
-  beforeRouteLeave: (to, from, next) => {
-    if (confirm('Have you logge out?') === true) {
-      next()
-    } else {
-      next(false)
-    }
+    ...mapGetters(['currentUser'])
   }
 }
 </script>
