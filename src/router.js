@@ -1,9 +1,14 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './components/Home.vue'
-import Menu from './components/Menu.vue'
-import Admin from './components/Admin.vue'
-import About from './components/About.vue'
+// import Menu from './components/Menu.vue'
+// import Admin from './components/Admin.vue'
+// import About from './components/About.vue'
+const Menu = () => import('./components/Menu.vue')
+const Admin = () =>
+  import(/* webpackChunkName: "footer-group" */ './components/Admin.vue')
+const About = () =>
+  import(/* webpackChunkName: "footer-group" */ './components/About.vue')
 import Contact from './components/Contact.vue'
 import Delivery from './components/Delivery.vue'
 import History from './components/History.vue'
@@ -14,7 +19,7 @@ Vue.use(Router)
 export default new Router({
   mode: 'history',
   linkActiveClass: 'is-active',
-  scrollBehavior(to, from, savedPosition) {
+  scrollBehavior(to) {
     //   return { x: 0, y: 0 }
     // return { selector: '.btn' }
     if (to.hash) {
